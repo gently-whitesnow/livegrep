@@ -9,9 +9,9 @@ on:
 name: Continuous integration
 
 env:
-  BASE_IMAGE_NAME: livegrep/base
-  INDEXER_IMAGE_NAME: livegrep/indexer
-  NGINX_IMAGE_NAME: livegrep/nginx
+  BASE_IMAGE_NAME: livegrep-base
+  INDEXER_IMAGE_NAME: livegrep-indexer
+  NGINX_IMAGE_NAME: livegrep-nginx
 
 jobs:
   ci:
@@ -65,8 +65,6 @@ jobs:
           DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
           DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
         run: |
-          echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
-
           BASE_IMAGE_ID=${{ secrets.DOCKER_HUB_USERNAME }}/$BASE_IMAGE_NAME
           INDEXER_IMAGE_ID=${{ secrets.DOCKER_HUB_USERNAME }}/$INDEXER_IMAGE_NAME
           NGINX_IMAGE_ID=${{ secrets.DOCKER_HUB_USERNAME }}/$NGINX_IMAGE_NAME

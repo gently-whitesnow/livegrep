@@ -81,7 +81,7 @@ func main() {
 
 	if *flagInstallation {
 		if *flagGithubKey == "" {
-			log.Fatal("-installation-key requires passing a github key, via either -github-key or $GITHUB_KEY")
+			log.Fatal("-installation-token requires passing a github key, via either -github-key or $GITHUB_KEY")
 		}
 		*flagHTTP = true
 		*flagHTTPUsername = "x-access-token"
@@ -153,6 +153,8 @@ func main() {
 	}
 	if *flagRevparse {
 		args = append(args, "--revparse")
+	} else {
+		args = append(args, "--revparse=false")
 	}
 	if *flagSkipMissing {
 		args = append(args, "--skip-missing")

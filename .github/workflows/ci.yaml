@@ -15,7 +15,7 @@ env:
 
 jobs:
   ci:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v3
       - name: Login to Docker Hub
@@ -44,8 +44,7 @@ jobs:
         run: bazel test --test_arg=-test.v //...
       - name: gofmt
         run: |
-          gofmt=$(bazel info output_base)/external/go_sdk/bin/gofmt
-          format_errors=$(find . -name '*.go' -print0 | xargs -0 "$gofmt" -l -e)
+          format_errors=$(bazel run @rules_go//go -- fmt ./...)
           if [ "$format_errors" ]; then
               echo "=== misformatted files (run gofmt) ==="
               echo "$format_errors"
@@ -53,7 +52,7 @@ jobs:
           fi
       - name: upload build output
         if: ${{ github.event_name == 'push' }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: "${{ env.build_output_file_name }}"
           path: "builds/${{ env.build_output_file_name }}.tgz"

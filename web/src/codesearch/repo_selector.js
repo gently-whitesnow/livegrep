@@ -54,7 +54,7 @@ function updateOptions(newOptions) {
     groups.set('/', $('#repos'))
 
     var repos = {};
-    newOptions.forEach(option => {
+    newOptions.forEach(function(option){
         var group = option.split("/")[0];
         if (repos[group]) {
             repos[group].push(option);
@@ -63,19 +63,22 @@ function updateOptions(newOptions) {
         };
     });
 
-    Object.entries(repos).forEach(([key, repo])=>{
-        if (!groups.has(key)) {
-            var groupDOM = $('<optgroup>').attr('label', key);
-            $('#repos').append(groupDOM);
-            groups.set(key, groupDOM);
-        };
+    for (var key in repos) {
+        if (repos.hasOwnProperty(key)) {
+            var repo = repos[key];
+            if (!groups.has(key)) {
+                var groupDOM = $('<optgroup>').attr('label', key);
+                $('#repos').append(groupDOM);
+                groups.set(key, groupDOM);
+            };
 
-        repo.forEach(fullPath=> {
-            var path = fullPath.split('/');
-            var name = path.slice(path.length - 1, path.length);
-            return groups.get(key).append($("<option>").attr("value", fullPath).text(name));
-        });
-    });
+            repo.forEach(function(fullPath){
+                var path = fullPath.split('/');
+                var name = path.slice(path.length - 1, path.length);
+                return groups.get(key).append($('<option>').attr('value', fullPath).text(name));
+            });
+        }
+    }
 
     groups.clear()
     $('#repos').selectpicker('refresh');

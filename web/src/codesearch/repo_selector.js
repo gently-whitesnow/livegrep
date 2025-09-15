@@ -53,19 +53,29 @@ function updateOptions(newOptions) {
     var groups = new Map()
     groups.set('/', $('#repos'))
 
-    for (var i = 0; i < newOptions.length; i++) {
-        var fullPath = newOptions[i];
-        var path = fullPath.split('/');
-        var group = path.slice(0, path.length - 1).join('/') + '/';
-        var option = path[path.length - 1];
+    var repos = {};
+    newOptions.forEach(option => {
+        var group = option.split("/")[0];
+        if (repos[group]) {
+            repos[group].push(option);
+        } else {
+            repos[group] = [option];
+        };
+    });
 
-        if (!groups.has(group)) {
-            var groupDOM = $('<optgroup>').attr('label', group)
+    Object.entries(repos).forEach(([key, repo])=>{
+        if (!groups.has(key)) {
+            var groupDOM = $('<optgroup>').attr('label', key);
             $('#repos').append(groupDOM);
-            groups.set(group, groupDOM)
-        }
-        groups.get(group).append($('<option>').attr('value', group + option).text(fullPath));
-    }
+            groups.set(key, groupDOM);
+        };
+
+        repo.forEach(fullPath=> {
+            var path = fullPath.split('/');
+            var name = path.slice(path.length - 1, path.length);
+            return groups.get(key).append($("<option>").attr("value", fullPath).text(name));
+        });
+    });
 
     groups.clear()
     $('#repos').selectpicker('refresh');

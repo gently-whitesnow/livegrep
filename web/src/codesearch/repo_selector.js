@@ -54,7 +54,8 @@ function updateOptions(newOptions) {
     groups.set('/', $('#repos'))
 
     for (var i = 0; i < newOptions.length; i++) {
-        var path = newOptions[i].split('/');
+        var fullPath = newOptions[i];
+        var path = fullPath.split('/');
         var group = path.slice(0, path.length - 1).join('/') + '/';
         var option = path[path.length - 1];
 
@@ -63,7 +64,7 @@ function updateOptions(newOptions) {
             $('#repos').append(groupDOM);
             groups.set(group, groupDOM)
         }
-        groups.get(group).append($('<option>').attr('value', group + option).text(option));
+        groups.get(group).append($('<option>').attr('value', group + option).text(fullPath));
     }
 
     groups.clear()
